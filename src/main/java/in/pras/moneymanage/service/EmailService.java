@@ -1,30 +1,48 @@
 package in.pras.moneymanage.service;
 
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    private final JavaMailSender mailSender;
-    @Value("${spring.mail.properties.mail.smtp.from}")
+
+    private final RestTemplate restTemplate;
+
+    @Value("${BREVO_API_KEY}")
+    private String brevoApiKey;
+
+    @Value("${FROM_EMAIL}")
     private String fromEmail;
-    public void  sendEmail(String to,String subject,String body){
-    try {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(fromEmail);
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        mailSender.send(message);
-    }catch (Exception e){
-        throw new RuntimeException(e.getMessage());
-    }
-    }
 
+    public void sendEmail(String to, String subject, String htmlContent) {
+        try {
+            String url = "https://api.brevo.com/v3/smtp/email";
 
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("api-key", brevoApiKey);
+
+            Map<String, Object> requestBody = Map.of(
+                    "sender", Map.of("email", fromEmail),
+                    "to", new Object[]{Map.of("email", to)},
+                    "subject", subject,
+                    "htmlContent", htmlContent
+            );
+
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+            ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+
+            System.out.println("Email sent successfully: " + response.getBody());
+
+        } catch (Exception e) {
+            System.out.println("Email sending failed: " + e.getMessage());
+        }
+    }
 }
