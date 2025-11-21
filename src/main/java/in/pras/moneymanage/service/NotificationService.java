@@ -27,7 +27,7 @@ public class NotificationService {
 
     // ⏰ Daily reminder to update expenses
    // @Scheduled(cron = " 0 * * * * *",zone = "Asia/Kolkata")
-    @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Kolkata")
+   @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Kolkata")
     public void sendDailyIncomeExpenseReminder() {
         log.info("Job Started: sendDailyIncomeExpenseReminder()");
 
@@ -53,8 +53,8 @@ public class NotificationService {
     }
 
     // ⏰ Daily summary email
-    //@Scheduled(cron = " 0 * * * * *",zone = "Asia/Kolkata")
-    @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Kolkata")
+   // @Scheduled(cron = " 0 * * * * *",zone = "Asia/Kolkata")
+   @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Kolkata")
     public void sendDailyExpenseSummary() {
         log.info("Job Started: sendDailyExpenseSummary()");
 
