@@ -54,7 +54,7 @@ public class NotificationService {
 
     // ⏰ Daily summary email
    // @Scheduled(cron = " 0 * * * * *",zone = "Asia/Kolkata")
-   @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Kolkata")
+   @Scheduled(cron = "0 0 23 * * *", zone = "Asia/Kolkata")
     public void sendDailyExpenseSummary() {
         log.info("Job Started: sendDailyExpenseSummary()");
 
